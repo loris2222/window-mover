@@ -81,7 +81,13 @@ For $i = 1 To $aList[0][0]
 		$pos = WinGetPos($aList[$i][0])
 		$file = _WinAPI_GetProcessNameFromHWND($aList[$i][1], True)
 		ExtractIcon($file, @ScriptDir&"/tempicons/"&$i&".bmp")
-		$winButtons[$i]=GUICtrlCreateButton($aList[$i][0], ($pos[0]+$primaryOffsetX)/$rescale, ($pos[1]+$primaryOffsetY)/$rescale, $pos[2]/$rescale, $pos[3]/$rescale, $BS_BITMAP)
+
+		;If window is maximized, location is not saved correctly
+		if(BitAND(WinGetState($aList[$i][0]),$WIN_STATE_MAXIMIZED)) then
+			$winButtons[$i]=GUICtrlCreateButton($aList[$i][0], (0+$primaryOffsetX)/$rescale, (0+$primaryOffsetY)/$rescale, 50, 50, $BS_BITMAP)
+		else
+			$winButtons[$i]=GUICtrlCreateButton($aList[$i][0], ($pos[0]+$primaryOffsetX)/$rescale, ($pos[1]+$primaryOffsetY)/$rescale, $pos[2]/$rescale, $pos[3]/$rescale, $BS_BITMAP)
+		EndIf
 		GUICtrlSetImage($winButtons[$i], @ScriptDir&"/tempicons/"&$i&".bmp")
 		$contextButtons[$i][0] = GUICtrlCreateContextMenu($winButtons[$i])
 		$contextButtons[$i][1] = GUICtrlCreateMenuItem("Close window", $contextButtons[$i][0])
@@ -108,12 +114,17 @@ While 1
 			$iSubtractX = $cInfo[0] - $aPos[0]
 			$iSubtractY = $cInfo[1] - $aPos[1]
 			; And then move the control until the mouse button is released
+			$text = ControlGetText($Form1, "", $iControl)
+			$winToMove = WinGetHandle($text)
+			if(BitAND(WinGetState($text),$WIN_STATE_MAXIMIZED)) then WinSetState($text, "", @SW_RESTORE)
+			$pos = WinGetPos($text)
+			if not @error then
+				ControlMove($Form1, "", $iControl, $cInfo[0] - $iSubtractX, $cInfo[1] - $iSubtractY, $pos[2]/$rescale, $pos[3]/$rescale)
+			EndIf
 			Do
 				$cInfo = GUIGetCursorInfo($Form1)
 				$aPos = ControlGetPos($Form1, "", $iControl)
 				ControlMove($Form1, "", $iControl, $cInfo[0] - $iSubtractX, $cInfo[1] - $iSubtractY)
-				$text = ControlGetText($Form1, "", $iControl)
-				$winToMove = WinGetHandle($text)
 				WinMove($winToMove, "", $aPos[0]*$rescale-$primaryOffsetX, $aPos[1]*$rescale-$primaryOffsetY)
 			Until Not $cInfo[2]
 		#cs
