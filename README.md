@@ -18,3 +18,5 @@ Kill windows from inside the program's UI.
 ### Filter windows
 Ignore windows based on title.  
 Ignore transparent windows.  
+
+⚠️ The script needs admininstrator privileges because windows such as Task Manager are run as Admin and cannot be moved without privileges.
