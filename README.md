@@ -7,12 +7,14 @@ Copy the .exe or compile with AutoIT v3.
 Change settings in `/src/settings.ini`; options are well commented inside the file.
 
 ## Features
-### Basic movement
+### Basic movement (drag and drop)
 Move windows by dragging a shrunk representation of your multi-monitor desktop area.
 ![ui](https://raw.githubusercontent.com/loris2222/window-mover/master/images/mainUI.png) 
 
-### Window operations
-1. Snap windows to origin or set a custom snap point.
-2. Kill windows from inside the program's UI.
-3. Ignore windows based on title
-4. Ignore transparent windows
+### Window operations (right click)
+Snap windows to origin or set a custom snap point.  
+Kill windows from inside the program's UI.
+
+### Filter windows
+Ignore windows based on title.  
+Ignore transparent windows.  
